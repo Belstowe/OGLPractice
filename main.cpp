@@ -3,6 +3,7 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <SOIL.h>
 
 #include "shader.h"
 
@@ -43,23 +44,42 @@ int main()
     glfwGetFramebufferSize(window, &width, &height);
     glViewport(0, 0, width, height);
 
+    /*
+    GLuint container_texture;
+    glGenTextures(1, &container_texture);
+    glBindTexture(GL_TEXTURE_2D, container_texture);
+    unsigned char *image = SOIL_load_image("container.jpg", &width, &height, 0, SOIL_LOAD_RGB);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+    glGenerateMipmap(GL_TEXTURE_2D);
+    SOIL_free_image_data(image);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    */
 
 
     GLfloat verticles[] = {
         // Позиции              // Цвета
-        0.5f,   -0.5f,  0.0f,   1.0f,   0.0f,   0.0f,
-        -0.5f,  -0.5f,  0.0f,   0.0f,   1.0f,   0.0f,
-        0.0f,   0.5f,   0.0f,   0.0f,   0.0f,   1.0f
+        0.5f,   0.5f,   0.0f,   1.0f,   0.0f,   0.0f,
+        0.5f,   -0.5f,  0.0f,   0.0f,   1.0f,   0.0f,
+        -0.5f,  -0.5f,  0.0f,   0.0f,   0.0f,   1.0f,
+        -0.5f,  0.5f,   0.0f,   1.0f,   1.0f,   0.0f
     };
-    Shader myShader("C:/Users/Belstowe/OpenGL/OGLPractice_1-5/myShader.vrs", "C:/Users/Belstowe/OpenGL/OGLPractice_1-5/myShader.frs");
+    GLuint indices[] = {
+        0, 1, 3,
+        1, 2, 3
+    };
+    Shader myShader("C:/Users/Belstowe/OpenGL/OGLPractice/myShader.vrs", "C:/Users/Belstowe/OpenGL/OGLPractice/myShader.frs");
 
-    GLuint VBO, VAO;
+    GLuint VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(verticles), verticles, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid *)0);
     glEnableVertexAttribArray(0);
@@ -79,17 +99,8 @@ int main()
 
         myShader.use();
 
-        /*
-        GLfloat timeValue = glfwGetTime();
-        GLfloat redValue = (sin(timeValue * 2) / 2);
-        GLfloat greenValue = (sin(timeValue) / 2) + 0.5f;
-        GLfloat blueValue = (sin(timeValue * 4) / 2) + 0.25f;
-        GLint vertexColorLocation = glGetUniformLocation(shaderProgram, "trColor");
-        glUniform4f(vertexColorLocation, redValue, greenValue, blueValue, 1.0f);
-        */
-
         glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
 
         glfwSwapBuffers(window);
@@ -97,6 +108,7 @@ int main()
 
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
     glfwTerminate();
     return 0;
 }
