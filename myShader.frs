@@ -1,8 +1,12 @@
 #version 330 core
 in vec3 myColor;
+in vec2 myTexCoord;
 
 out vec4 color;
 
+uniform sampler2D myTexture;
+uniform float mySaturation;
+
 void main() {
-    color = vec4(myColor, 1.0f);
+    color = texture(myTexture, myTexCoord) * vec4(myColor, mySaturation);
 }
