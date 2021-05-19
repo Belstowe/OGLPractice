@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <string>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -16,8 +17,6 @@ void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mode
     if ((key == GLFW_KEY_ESCAPE) && (action == GLFW_PRESS))
         glfwSetWindowShouldClose(window, GL_TRUE);
 }
-
-bool loadPngImage(char *name, int &outWidth, int &outHeight, bool &outHasAlpha, GLubyte **outData);
 
 int main()
 {
@@ -57,7 +56,7 @@ int main()
         0, 1, 3,
         1, 2, 3
     };
-    Shader myShader("C:/Users/Belstowe/OpenGL/OGLPractice/myShader.vrs", "C:/Users/Belstowe/OpenGL/OGLPractice/myShader.frs");
+    Shader myShader("shaders/myShader.vrs", "shaders/myShader.frs");
 
     GLuint VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
@@ -81,12 +80,8 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-
-
-    //glEnable(GL_DEPTH_TEST);
-    //glEnable(GL_BLEND);
-    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    PNGTexture containerText("C:/Users/Belstowe/OpenGL/OGLPractice/container.png");
+    PNGTexture containerText("textures/container.png");
+    PNGTexture awesomeText("textures/awesome.png");
 
 
 
@@ -96,13 +91,19 @@ int main()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        containerText.bind();
         myShader.use();
 
         GLfloat timeValue = glfwGetTime();
         GLfloat satValue = (sin(timeValue) / 2) + 0.5;
         GLint vertexSaturationLocation = glGetUniformLocation(myShader.Program, "mySaturation");
         glUniform1f(vertexSaturationLocation, satValue);
+
+        glActiveTexture(GL_TEXTURE0);
+        containerText.bind();
+        glUniform1i(glGetUniformLocation(myShader.Program, "myTexture1"), 0);
+        glActiveTexture(GL_TEXTURE1);
+        awesomeText.bind();
+        glUniform1i(glGetUniformLocation(myShader.Program, "myTexture2"), 1);
 
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
