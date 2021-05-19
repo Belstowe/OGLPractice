@@ -37,6 +37,9 @@ HEADERS += \
     ../Libraries/include/GLFW/glfw3native.h \
     ../Libraries/include/GL/glew.h \
     ../Libraries/include/png.h \
+    ../Libraries/include/glm/glm.hpp \
+    ../Libraries/include/glm/gtc/matrix_transform.hpp \
+    ../Libraries/include/glm/gtc/type_ptr.hpp \
     pngtexture.h \
     shader.h
 

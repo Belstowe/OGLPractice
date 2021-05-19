@@ -4,6 +4,9 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "shader.h"
 #include "pngtexture.h"
@@ -26,7 +29,7 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    GLFWwindow *window = glfwCreateWindow(WIDTH, HEIGHT, "No Longer Triangle", NULL, NULL);
+    GLFWwindow *window = glfwCreateWindow(WIDTH, HEIGHT, "But More Containers!", NULL, NULL);
     if (window == NULL) {
         cout << "Failed to create GLFW window" << endl;
         glfwTerminate();
@@ -83,8 +86,20 @@ int main()
     PNGTexture containerText("textures/container.png");
     PNGTexture awesomeText("textures/awesome.png");
 
+    /*
+    glm::mat4 trans(1.0f);
+    trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
+    trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
+    trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
+    */
 
-
+    GLfloat timeValue = 0;
+    /*
+    GLfloat pastFrameTimeValue = 0;
+    GLfloat speedCoef = 60 * (timeValue - pastFrameTimeValue);
+    */
+    glm::mat4 trans;
+    GLfloat satValue, scaleFactor;
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
 
@@ -92,11 +107,6 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
 
         myShader.use();
-
-        GLfloat timeValue = glfwGetTime();
-        GLfloat satValue = (sin(timeValue) / 2) + 0.5;
-        GLint vertexSaturationLocation = glGetUniformLocation(myShader.Program, "mySaturation");
-        glUniform1f(vertexSaturationLocation, satValue);
 
         glActiveTexture(GL_TEXTURE0);
         containerText.bind();
@@ -106,10 +116,33 @@ int main()
         glUniform1i(glGetUniformLocation(myShader.Program, "myTexture2"), 1);
 
         glBindVertexArray(VAO);
+
+        satValue = (sin(timeValue) / 2) + 0.5;
+        scaleFactor = 0.5f;
+        trans = glm::mat4(1.0f);
+        trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
+        trans = glm::rotate(trans, glm::radians(timeValue) * 100.0f, glm::vec3(0.0, 0.0, 1.0));
+        trans = glm::scale(trans, glm::vec3(scaleFactor, scaleFactor, scaleFactor));
+        //trans = glm::rotate(trans, glm::radians(speedCoef), glm::vec3(0.0, 0.0, 1.0));
+        glUniform1f(glGetUniformLocation(myShader.Program, "mySaturation"), satValue);
+        glUniformMatrix4fv(glGetUniformLocation(myShader.Program, "transform"), 1, GL_FALSE, glm::value_ptr(trans));
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+        satValue = 0.0;
+        scaleFactor = (sin(2 * timeValue) / 4) + 0.5;
+        trans = glm::mat4(1.0f);
+        trans = glm::translate(trans, glm::vec3(-0.5f, 0.5f, 0.0f));
+        trans = glm::scale(trans, glm::vec3(scaleFactor, scaleFactor, scaleFactor));
+        glUniform1f(glGetUniformLocation(myShader.Program, "mySaturation"), satValue);
+        glUniformMatrix4fv(glGetUniformLocation(myShader.Program, "transform"), 1, GL_FALSE, glm::value_ptr(trans));
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
         glBindVertexArray(0);
 
         glfwSwapBuffers(window);
+        //pastFrameTimeValue = timeValue;
+        timeValue = glfwGetTime();
+        //speedCoef = 60 * (timeValue - pastFrameTimeValue);
     }
 
     glDeleteVertexArrays(1, &VAO);
