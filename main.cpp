@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include <string>
+#include <vector>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -11,9 +12,11 @@
 #include "shader.h"
 #include "pngtexture.h"
 #include "camera.h"
+#include "ogl_obj/objpyramid.h"
+#include "ogl_obj/objcube.h"
 
-#define WIDTH 800
-#define HEIGHT 600
+#define WIDTH 1280
+#define HEIGHT 720
 
 using namespace std;
 
@@ -33,7 +36,7 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    GLFWwindow *window = glfwCreateWindow(WIDTH, HEIGHT, "More Containers in 3D!", NULL, NULL);
+    GLFWwindow *window = glfwCreateWindow(WIDTH, HEIGHT, "OpenGL 3D Scene", NULL, NULL);
     if (window == NULL) {
         cout << "Failed to create GLFW window" << endl;
         glfwTerminate();
@@ -51,89 +54,37 @@ int main()
     glfwGetFramebufferSize(window, &screenWidth, &screenHeight);
     glViewport(0, 0, screenWidth, screenHeight);
 
-    GLfloat verticles[] = {
-        // Позиции              // Текстурные координаты
-        -0.5f,  -0.5f,  -0.5f,  1.0f,   0.0f, // Задняя сторона
-        0.5f,   -0.5f,  -0.5f,  0.0f,   0.0f,
-        0.5f,   0.5f,   -0.5f,  0.0f,   1.0f,
-        0.5f,   0.5f,   -0.5f,  0.0f,   1.0f,
-        -0.5f,  0.5f,   -0.5f,  1.0f,   1.0f,
-        -0.5f,  -0.5f,  -0.5f,  1.0f,   0.0f,
-
-        -0.5f,  -0.5f,  0.5f,   0.0f,   0.0f, // Передняя сторона
-        0.5f,   -0.5f,  0.5f,   1.0f,   0.0f,
-        0.5f,   0.5f,   0.5f,   1.0f,   1.0f,
-        0.5f,   0.5f,   0.5f,   1.0f,   1.0f,
-        -0.5f,  0.5f,   0.5f,   0.0f,   1.0f,
-        -0.5f,  -0.5f,  0.5f,   0.0f,   0.0f,
-
-        -0.5f,  0.5f,   0.5f,   1.0f,   1.0f, // Левая сторона
-        -0.5f,  0.5f,   -0.5f,  0.0f,   1.0f,
-        -0.5f,  -0.5f,  -0.5f,  0.0f,   0.0f,
-        -0.5f,  -0.5f,  -0.5f,  0.0f,   0.0f,
-        -0.5f,  -0.5f,  0.5f,   1.0f,   0.0f,
-        -0.5f,  0.5f,   0.5f,   1.0f,   1.0f,
-
-        0.5f,   0.5f,   0.5f,   0.0f,   1.0f, // Правая сторона
-        0.5f,   0.5f,   -0.5f,  1.0f,   1.0f,
-        0.5f,   -0.5f,  -0.5f,  1.0f,   0.0f,
-        0.5f,   -0.5f,  -0.5f,  1.0f,   0.0f,
-        0.5f,   -0.5f,  0.5f,   0.0f,   0.0f,
-        0.5f,   0.5f,   0.5f,   0.0f,   1.0f,
-
-        -0.5f,  -0.5f,  -0.5f,  0.0f,   0.0f, // Нижняя сторона
-        0.5f,   -0.5f,  -0.5f,  1.0f,   0.0f,
-        0.5f,   -0.5f,  0.5f,   1.0f,   1.0f,
-        0.5f,   -0.5f,  0.5f,   1.0f,   1.0f,
-        -0.5f,  -0.5f,  0.5f,   0.0f,   1.0f,
-        -0.5f,  -0.5f,  -0.5f,  0.0f,   0.0f,
-
-        -0.5f,  0.5f,   -0.5f,  0.0f,   1.0f, // Верхняя сторона
-        0.5f,   0.5f,   -0.5f,  1.0f,   1.0f,
-        0.5f,   0.5f,    0.5f,  1.0f,   0.0f,
-        0.5f,   0.5f,    0.5f,  1.0f,   0.0f,
-        -0.5f,  0.5f,    0.5f,  0.0f,   0.0f,
-        -0.5f,  0.5f,   -0.5f,  0.0f,   1.0f
-    };
-    glm::vec3 cubePositions[] = {
-        glm::vec3( 0.0f,    0.0f,   0.0f),
-        glm::vec3( 2.0f,    5.0f,   -15.0f),
-        glm::vec3(-1.5f,    -2.2f,  -2.5f),
-        glm::vec3(-3.8f,    -2.0f,  -12.3f),
-        glm::vec3( 2.4f,    -0.4f,  -3.5f),
-        glm::vec3(-1.7f,    3.0f,   -7.5f),
-        glm::vec3( 1.3f,    -2.0f,  -2.5f),
-        glm::vec3( 1.5f,    2.0f,   -2.5f),
-        glm::vec3( 1.5f,    0.2f,   -1.5f),
-        glm::vec3(-1.3f,    1.0f,   -1.5f)
-    };
-    Shader myShader("shaders/myShader.vrs", "shaders/myShader.frs");
-
-    GLuint VBO, VAO;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(verticles), verticles, GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid *)0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid *)(3 * sizeof(GLfloat)));
-    glEnableVertexAttribArray(1);
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
+    Shader myShader("shaders/standardShader.vrs", "shaders/standardShader.frs");
 
     PNGTexture containerText("textures/container.png");
     PNGTexture awesomeText("textures/awesome.png");
+    PNGTexture reimuText("textures/reimu.png");
+    PNGTexture marisaText("textures/marisa.png");
+    PNGTexture fabricText("textures/fabric.png");
+    PNGTexture transText("textures/transparent.png");
+    PNGTexture floorText("textures/woodfloor.png");
+    PNGTexture wallText("textures/woodwall.png");
+    PNGTexture boxsideText("textures/boxside.png");
+    PNGTexture boxtopText("textures/boxtop.png");
 
+    vector<OGLObj *> objlist;
+    // Комната
+    objlist.push_back(new ObjCube(myShader.Program, glm::vec3(0.0f, 4.5f, 0.0f), &wallText, &wallText, &floorText, &transText, &transText, &transText, 10.0f, glm::vec3(0.0f, 0.0f, 0.0f)));
+    // Пирамидки с Рейму
+    objlist.push_back(new ObjPyramid(myShader.Program, glm::vec3(-0.6f, 2.3f + 0.0003f, 1.0f), &fabricText, &reimuText, &transText, &transText, 0.75f, glm::vec3(1.0f, 7.0f, 35.0f)));
+    objlist.push_back(new ObjPyramid(myShader.Program, glm::vec3(0.2f, 2.25f + 0.0003f, 1.3f), &fabricText, &reimuText, &transText, &transText, 0.5f, glm::vec3(0.0f, 20.0f, 0.0f)));
+    objlist.push_back(new ObjPyramid(myShader.Program, glm::vec3(1.2f, 0.9f + 0.0002f, 2.0f), &fabricText, &marisaText, &transText, &transText, 0.8f, glm::vec3(0.0f, 90.0f, 0.0f)));
+    // Ящики
+    objlist.push_back(new ObjCube(myShader.Program, glm::vec3(0.0f, 0.25f + 0.0001f, 1.0f), &boxtopText, &boxsideText, &boxtopText, &transText, &transText, &transText, 1.5f, glm::vec3(0.0f, 30.0f, 0.0f)));
+    objlist.push_back(new ObjCube(myShader.Program, glm::vec3(1.2f, 0.0f + 0.0001f, 2.0f), &boxtopText, &boxsideText, &boxtopText, &transText, &transText, &transText, 1.0f, glm::vec3(0.0f, 0.0f, 90.0f)));
+    objlist.push_back(new ObjCube(myShader.Program, glm::vec3(0.05f, 1.5f + 0.0002f, 1.1f), &boxtopText, &boxsideText, &boxtopText, &transText, &transText, &transText, 1.0f, glm::vec3(0.0f, 15.0f, 0.0f)));
+    objlist.push_back(new ObjCube(myShader.Program, glm::vec3(-0.8f, 0.1f + 0.0001f, -0.8f), &boxtopText, &boxsideText, &boxtopText, &transText, &transText, &transText, 1.2f, glm::vec3(0.0f, 20.0f, 0.0f)));
+    objlist.push_back(new ObjCube(myShader.Program, glm::vec3(4.0f, 0.1f + 0.0001f, -4.1f), &boxtopText, &boxsideText, &boxtopText, &transText, &transText, &transText, 1.2f, glm::vec3(0.0f, -10.0f, 0.0f)));
 
 
     GLfloat timeValue = 0;
     GLfloat pastFrameTimeValue = 0;
     GLfloat deltaTime = timeValue - pastFrameTimeValue;
-    const glm::mat4 unitmat(1.0f);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glEnable(GL_TEXTURE_2D);
@@ -148,26 +99,12 @@ int main()
 
         myShader.use();
 
-        glActiveTexture(GL_TEXTURE0);
-        containerText.bind();
-        glUniform1i(glGetUniformLocation(myShader.Program, "baseTexture"), 0);
-        glActiveTexture(GL_TEXTURE1);
-        awesomeText.bind();
-        glUniform1i(glGetUniformLocation(myShader.Program, "overlayTexture"), 1);
-
-        glBindVertexArray(VAO);
         glm::mat4 projection = glm::perspective(camera.zoom, (GLfloat)screenWidth / (GLfloat)screenHeight, 0.1f, 100.0f);
         glm::mat4 view = camera.view();
         glUniformMatrix4fv(glGetUniformLocation(myShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
         glUniformMatrix4fv(glGetUniformLocation(myShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
-        for (GLuint i = 0; i < (sizeof(cubePositions) / sizeof(glm::vec3)); i++) {
-            glm::mat4 model = glm::translate(unitmat, cubePositions[i]);
-            model = glm::rotate(model, glm::radians(25.0f * i), glm::vec3(1.0f, 0.3f, 0.5f));
-            model = glm::rotate(model, glm::radians(timeValue * 20.0f * i), glm::vec3(0.0f, 1.0f, 0.0f));
-            glUniformMatrix4fv(glGetUniformLocation(myShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
-            glDrawArrays(GL_TRIANGLES, 0, 36);
-        }
-        glBindVertexArray(0);
+        for (GLuint i = 0; i < objlist.size(); i++)
+            objlist[i]->draw();
 
         glfwSwapBuffers(window);
         pastFrameTimeValue = timeValue;
@@ -175,8 +112,6 @@ int main()
         deltaTime = timeValue - pastFrameTimeValue;
     }
 
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
     glfwTerminate();
     return 0;
 }
@@ -184,6 +119,13 @@ int main()
 void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mode) {
     if ((key == GLFW_KEY_ESCAPE) && (action == GLFW_PRESS))
         glfwSetWindowShouldClose(window, GL_TRUE);
+    if ((key == GLFW_KEY_RIGHT_CONTROL) && (action == GLFW_PRESS)) {
+        cout << camera.pos.x << " " << camera.pos.y << " " << camera.pos.z << endl;
+        cout << camera.front.x << " " << camera.front.y << " " << camera.front.z << endl;
+        cout << camera.up.x << " " << camera.up.y << " " << camera.up.z << endl;
+        cout << camera.yaw << " " << camera.pitch << endl;
+    }
+
     if ((key >= 0) && (key < 1024)) {
         if (action == GLFW_PRESS)
             keys[key] = true;

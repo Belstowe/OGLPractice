@@ -9,8 +9,11 @@ else:unix: LIBS += -lGL -lGLU -lX11 -lXxf86vm -lXrandr -lpthread -lXi -ldl -lXin
 SOURCES += \
         camera.cpp \
         main.cpp \
+        ogl_obj/objcube.cpp \
+        ogl_obj/oglobj.cpp \
         pngtexture.cpp \
-        shader.cpp
+        shader.cpp \
+        ogl_obj/objpyramid.cpp
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../Libraries/lib/GLFW/ -lglfw3
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../Libraries/lib/GLFW/ -lglfw3d
@@ -41,13 +44,16 @@ HEADERS += \
     ../Libraries/include/glm/glm.hpp \
     ../Libraries/include/glm/gtc/matrix_transform.hpp \
     ../Libraries/include/glm/gtc/type_ptr.hpp \
+    ogl_obj/objcube.h \
+    ogl_obj/objpyramid.h \
     camera.h \
+    ogl_obj/oglobj.h \
     pngtexture.h \
     shader.h
 
 DISTFILES += \
-    shaders/myShader.frs \
-    shaders/myShader.vrs \
+    shaders/standardShader.frs \
+    shaders/standardShader.vrs \
     textures/awesome.png \
     textures/container.png
 

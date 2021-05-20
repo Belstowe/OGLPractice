@@ -3,8 +3,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 Camera::Camera()
-    : pos(glm::vec3(0.0f, 0.0f, 3.0f)), front(glm::vec3(0.0f, 0.0f, -1.0f)), up(glm::vec3(0.0f, 1.0f, 0.0f)), worldUp(glm::vec3(0.0f, 1.0f, 0.0f)),
-      yaw(-90.0f), pitch(0.0f), speed(3.0f), mouseSensitivity(0.25f), zoom(45.0f)
+    : pos(glm::vec3(-2.0f, 3.5f, 4.3f)), front(glm::vec3(0.4f, -0.5f, -0.75f)), up(glm::vec3(0.25f, 0.85f, -0.4f)), worldUp(glm::vec3(0.0f, 1.0f, 0.0f)),
+      yaw(-60.0f), pitch(-30.0f), speed(3.0f), mouseSensitivity(0.25f), zoom(45.0f)
 {
     this->updateVectors();
 }
