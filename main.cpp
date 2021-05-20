@@ -29,7 +29,7 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    GLFWwindow *window = glfwCreateWindow(WIDTH, HEIGHT, "But More Containers!", NULL, NULL);
+    GLFWwindow *window = glfwCreateWindow(WIDTH, HEIGHT, "Container, now in 3D!", NULL, NULL);
     if (window == NULL) {
         cout << "Failed to create GLFW window" << endl;
         glfwTerminate();
@@ -49,11 +49,48 @@ int main()
     glViewport(0, 0, screenWidth, screenHeight);
 
     GLfloat verticles[] = {
-        // Позиции              // Цвета                // Координаты текстуры
-        0.5f,   0.5f,   0.0f,   1.0f,   0.0f,   0.0f,   1.0f,   1.0f,   // Правый верхний
-        0.5f,   -0.5f,  0.0f,   0.0f,   1.0f,   0.0f,   1.0f,   0.0f,   // Правый нижний
-        -0.5f,  -0.5f,  0.0f,   0.0f,   0.0f,   1.0f,   0.0f,   0.0f,   // Левый нижний
-        -0.5f,  0.5f,   0.0f,   1.0f,   1.0f,   0.0f,   0.0f,   1.0f    // Левый верхний
+        // Позиции              // Текстурные координаты
+        -0.5f,  -0.5f,  -0.5f,  0.0f,   0.0f,
+        0.5f,   -0.5f,  -0.5f,  1.0f,   0.0f,
+        0.5f,   0.5f,   -0.5f,  1.0f,   1.0f,
+        0.5f,   0.5f,   -0.5f,  1.0f,   1.0f,
+        -0.5f,  0.5f,   -0.5f,  0.0f,   1.0f,
+        -0.5f,  -0.5f,  -0.5f,  0.0f,   0.0f,
+
+        -0.5f,  -0.5f,  0.5f,   0.0f,   0.0f,
+        0.5f,   -0.5f,  0.5f,   1.0f,   0.0f,
+        0.5f,   0.5f,   0.5f,   1.0f,   1.0f,
+        0.5f,   0.5f,   0.5f,   1.0f,   1.0f,
+        -0.5f,  0.5f,   0.5f,   0.0f,   1.0f,
+        -0.5f,  -0.5f,  0.5f,   0.0f,   0.0f,
+
+        -0.5f,  0.5f,   0.5f,   1.0f,   0.0f,
+        -0.5f,  0.5f,   -0.5f,  1.0f,   1.0f,
+        -0.5f,  -0.5f,  -0.5f,  0.0f,   1.0f,
+        -0.5f,  -0.5f,  -0.5f,  0.0f,   1.0f,
+        -0.5f,  -0.5f,  0.5f,   0.0f,   0.0f,
+        -0.5f,  0.5f,   0.5f,   1.0f,   0.0f,
+
+        0.5f,   0.5f,   0.5f,   1.0f,   0.0f,
+        0.5f,   0.5f,   -0.5f,  1.0f,   1.0f,
+        0.5f,   -0.5f,  -0.5f,  0.0f,   1.0f,
+        0.5f,   -0.5f,  -0.5f,  0.0f,   1.0f,
+        0.5f,   -0.5f,  0.5f,   0.0f,   0.0f,
+        0.5f,   0.5f,   0.5f,   1.0f,   0.0f,
+
+        -0.5f,  -0.5f,  -0.5f,  0.0f,   1.0f,
+        0.5f,   -0.5f,  -0.5f,  1.0f,   1.0f,
+        0.5f,   -0.5f,  0.5f,   1.0f,   0.0f,
+        0.5f,   -0.5f,  0.5f,   1.0f,   0.0f,
+        -0.5f,  -0.5f,  0.5f,   0.0f,   0.0f,
+        -0.5f,  -0.5f,  -0.5f,  0.0f,   1.0f,
+
+        -0.5f,  0.5f,   -0.5f,  0.0f,   1.0f,
+        0.5f,   0.5f,   -0.5f,  1.0f,   1.0f,
+        0.5f,   0.5f,    0.5f,  1.0f,   0.0f,
+        0.5f,   0.5f,    0.5f,  1.0f,   0.0f,
+        -0.5f,  0.5f,    0.5f,  0.0f,   0.0f,
+        -0.5f,  0.5f,   -0.5f,  0.0f,   1.0f
     };
     GLuint indices[] = {
         0, 1, 3,
@@ -73,12 +110,10 @@ int main()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid *)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid *)0);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid *)(3 * sizeof(GLfloat)));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid *)(3 * sizeof(GLfloat)));
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid *)(6 * sizeof(GLfloat)));
-    glEnableVertexAttribArray(2);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
@@ -89,20 +124,17 @@ int main()
 
 
     GLfloat timeValue = 0;
-    GLfloat pastFrameTimeValue = 0;
-    GLfloat speedCoef = 60 * (timeValue - pastFrameTimeValue);
-    // glm::mat4 trans;
-    GLfloat satValue;
-    //GLfloat scaleFactor;
+    //GLfloat pastFrameTimeValue = 0;
+    //GLfloat speedCoef = 60 * (timeValue - pastFrameTimeValue);
     const glm::mat4 unitmat(1.0f);
-    glm::mat4 model = glm::rotate(unitmat, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
     glm::mat4 view = glm::translate(unitmat, glm::vec3(0.0f, 0.0f, -3.0f));
     glm::mat4 projection = glm::perspective(glm::radians(45.0f), (GLfloat)screenWidth / (GLfloat)screenHeight, 0.1f, 100.0f);
+    glEnable(GL_DEPTH_TEST);
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         myShader.use();
 
@@ -115,34 +147,20 @@ int main()
 
         glBindVertexArray(VAO);
 
-        satValue = (sin(timeValue) / 2) + 0.5;
-        //scaleFactor = 0.5f;
-        //trans = glm::mat4(1.0f);
-        //trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
-        //trans = glm::rotate(trans, glm::radians(timeValue) * 100.0f, glm::vec3(0.0, 0.0, 1.0));
-        //trans = glm::scale(trans, glm::vec3(scaleFactor, scaleFactor, scaleFactor));
-        model = glm::rotate(model, glm::radians(speedCoef * glm::radians(120.0f)), glm::vec3(0.0f, 1.0f, 0.0f));
-        glUniform1f(glGetUniformLocation(myShader.Program, "mySaturation"), satValue);
+        glm::mat4 model = glm::rotate(unitmat, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+        model = glm::rotate(model, glm::radians(timeValue * 90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         glUniformMatrix4fv(glGetUniformLocation(myShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
         glUniformMatrix4fv(glGetUniformLocation(myShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
         glUniformMatrix4fv(glGetUniformLocation(myShader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-        //satValue = 0.0;
-        //scaleFactor = (sin(2 * timeValue) / 4) + 0.5;
-        //trans = glm::mat4(1.0f);
-        //trans = glm::translate(trans, glm::vec3(-0.5f, 0.5f, 0.0f));
-        //trans = glm::scale(trans, glm::vec3(scaleFactor, scaleFactor, scaleFactor));
-        //glUniform1f(glGetUniformLocation(myShader.Program, "mySaturation"), satValue);
-        //glUniformMatrix4fv(glGetUniformLocation(myShader.Program, "transform"), 1, GL_FALSE, glm::value_ptr(trans));
-        //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        //glDrawElements(GL_TRIANGLES, 4, GL_UNSIGNED_INT, 0);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
 
         glBindVertexArray(0);
 
         glfwSwapBuffers(window);
-        pastFrameTimeValue = timeValue;
+        //pastFrameTimeValue = timeValue;
         timeValue = glfwGetTime();
-        speedCoef = 60 * (timeValue - pastFrameTimeValue);
+        //speedCoef = 60 * (timeValue - pastFrameTimeValue);
     }
 
     glDeleteVertexArrays(1, &VAO);
