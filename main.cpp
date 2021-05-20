@@ -10,27 +10,20 @@
 
 #include "shader.h"
 #include "pngtexture.h"
+#include "camera.h"
 
 #define WIDTH 800
 #define HEIGHT 600
 
 using namespace std;
 
-GLfloat x_pos = 0.0f;
-GLfloat z_pos = -3.0f;
+bool keys[1024];
+Camera camera;
+int screenWidth, screenHeight;
+GLfloat edgeProximityX = 0.0f, edgeProximityY = 0.0f;
 
-void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mode) {
-    if ((key == GLFW_KEY_ESCAPE) && (action == GLFW_PRESS))
-        glfwSetWindowShouldClose(window, GL_TRUE);
-    else if ((key == GLFW_KEY_W) && (action == GLFW_PRESS))
-        z_pos += 1.0f;
-    else if ((key == GLFW_KEY_S) && (action == GLFW_PRESS))
-        z_pos -= 1.0f;
-    else if ((key == GLFW_KEY_A) && (action == GLFW_PRESS))
-        x_pos += 1.0f;
-    else if ((key == GLFW_KEY_D) && (action == GLFW_PRESS))
-        x_pos -= 1.0f;
-}
+void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mode);
+void cameraControl(GLfloat deltaTime);
 
 int main()
 {
@@ -55,48 +48,47 @@ int main()
         return -1;
     }
 
-    int screenWidth, screenHeight;
     glfwGetFramebufferSize(window, &screenWidth, &screenHeight);
     glViewport(0, 0, screenWidth, screenHeight);
 
     GLfloat verticles[] = {
         // Позиции              // Текстурные координаты
-        -0.5f,  -0.5f,  -0.5f,  0.0f,   0.0f,
-        0.5f,   -0.5f,  -0.5f,  1.0f,   0.0f,
-        0.5f,   0.5f,   -0.5f,  1.0f,   1.0f,
-        0.5f,   0.5f,   -0.5f,  1.0f,   1.0f,
-        -0.5f,  0.5f,   -0.5f,  0.0f,   1.0f,
-        -0.5f,  -0.5f,  -0.5f,  0.0f,   0.0f,
+        -0.5f,  -0.5f,  -0.5f,  1.0f,   0.0f, // Задняя сторона
+        0.5f,   -0.5f,  -0.5f,  0.0f,   0.0f,
+        0.5f,   0.5f,   -0.5f,  0.0f,   1.0f,
+        0.5f,   0.5f,   -0.5f,  0.0f,   1.0f,
+        -0.5f,  0.5f,   -0.5f,  1.0f,   1.0f,
+        -0.5f,  -0.5f,  -0.5f,  1.0f,   0.0f,
 
-        -0.5f,  -0.5f,  0.5f,   0.0f,   0.0f,
+        -0.5f,  -0.5f,  0.5f,   0.0f,   0.0f, // Передняя сторона
         0.5f,   -0.5f,  0.5f,   1.0f,   0.0f,
         0.5f,   0.5f,   0.5f,   1.0f,   1.0f,
         0.5f,   0.5f,   0.5f,   1.0f,   1.0f,
         -0.5f,  0.5f,   0.5f,   0.0f,   1.0f,
         -0.5f,  -0.5f,  0.5f,   0.0f,   0.0f,
 
-        -0.5f,  0.5f,   0.5f,   1.0f,   0.0f,
-        -0.5f,  0.5f,   -0.5f,  1.0f,   1.0f,
-        -0.5f,  -0.5f,  -0.5f,  0.0f,   1.0f,
-        -0.5f,  -0.5f,  -0.5f,  0.0f,   1.0f,
-        -0.5f,  -0.5f,  0.5f,   0.0f,   0.0f,
-        -0.5f,  0.5f,   0.5f,   1.0f,   0.0f,
-
-        0.5f,   0.5f,   0.5f,   1.0f,   0.0f,
-        0.5f,   0.5f,   -0.5f,  1.0f,   1.0f,
-        0.5f,   -0.5f,  -0.5f,  0.0f,   1.0f,
-        0.5f,   -0.5f,  -0.5f,  0.0f,   1.0f,
-        0.5f,   -0.5f,  0.5f,   0.0f,   0.0f,
-        0.5f,   0.5f,   0.5f,   1.0f,   0.0f,
-
-        -0.5f,  -0.5f,  -0.5f,  0.0f,   1.0f,
-        0.5f,   -0.5f,  -0.5f,  1.0f,   1.0f,
-        0.5f,   -0.5f,  0.5f,   1.0f,   0.0f,
-        0.5f,   -0.5f,  0.5f,   1.0f,   0.0f,
-        -0.5f,  -0.5f,  0.5f,   0.0f,   0.0f,
-        -0.5f,  -0.5f,  -0.5f,  0.0f,   1.0f,
-
+        -0.5f,  0.5f,   0.5f,   1.0f,   1.0f, // Левая сторона
         -0.5f,  0.5f,   -0.5f,  0.0f,   1.0f,
+        -0.5f,  -0.5f,  -0.5f,  0.0f,   0.0f,
+        -0.5f,  -0.5f,  -0.5f,  0.0f,   0.0f,
+        -0.5f,  -0.5f,  0.5f,   1.0f,   0.0f,
+        -0.5f,  0.5f,   0.5f,   1.0f,   1.0f,
+
+        0.5f,   0.5f,   0.5f,   0.0f,   1.0f, // Правая сторона
+        0.5f,   0.5f,   -0.5f,  1.0f,   1.0f,
+        0.5f,   -0.5f,  -0.5f,  1.0f,   0.0f,
+        0.5f,   -0.5f,  -0.5f,  1.0f,   0.0f,
+        0.5f,   -0.5f,  0.5f,   0.0f,   0.0f,
+        0.5f,   0.5f,   0.5f,   0.0f,   1.0f,
+
+        -0.5f,  -0.5f,  -0.5f,  0.0f,   0.0f, // Нижняя сторона
+        0.5f,   -0.5f,  -0.5f,  1.0f,   0.0f,
+        0.5f,   -0.5f,  0.5f,   1.0f,   1.0f,
+        0.5f,   -0.5f,  0.5f,   1.0f,   1.0f,
+        -0.5f,  -0.5f,  0.5f,   0.0f,   1.0f,
+        -0.5f,  -0.5f,  -0.5f,  0.0f,   0.0f,
+
+        -0.5f,  0.5f,   -0.5f,  0.0f,   1.0f, // Верхняя сторона
         0.5f,   0.5f,   -0.5f,  1.0f,   1.0f,
         0.5f,   0.5f,    0.5f,  1.0f,   0.0f,
         0.5f,   0.5f,    0.5f,  1.0f,   0.0f,
@@ -115,26 +107,15 @@ int main()
         glm::vec3( 1.5f,    0.2f,   -1.5f),
         glm::vec3(-1.3f,    1.0f,   -1.5f)
     };
-    /*
-    GLuint indices[] = {
-        0, 1, 3,
-        1, 2, 3
-    };
-    */
     Shader myShader("shaders/myShader.vrs", "shaders/myShader.frs");
 
     GLuint VBO, VAO;
-    //GLuint EBO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
-    //glGenBuffers(1, &EBO);
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(verticles), verticles, GL_STATIC_DRAW);
-
-    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    //glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid *)0);
     glEnableVertexAttribArray(0);
@@ -150,13 +131,17 @@ int main()
 
 
     GLfloat timeValue = 0;
-    //GLfloat pastFrameTimeValue = 0;
-    //GLfloat speedCoef = 60 * (timeValue - pastFrameTimeValue);
+    GLfloat pastFrameTimeValue = 0;
+    GLfloat deltaTime = timeValue - pastFrameTimeValue;
     const glm::mat4 unitmat(1.0f);
-    glm::mat4 projection = glm::perspective(glm::radians(45.0f), (GLfloat)screenWidth / (GLfloat)screenHeight, 0.1f, 100.0f);
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+    glEnable(GL_TEXTURE_2D);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glShadeModel(GL_FLAT);
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
+        cameraControl(deltaTime);
 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -165,13 +150,14 @@ int main()
 
         glActiveTexture(GL_TEXTURE0);
         containerText.bind();
-        glUniform1i(glGetUniformLocation(myShader.Program, "myTexture1"), 0);
+        glUniform1i(glGetUniformLocation(myShader.Program, "baseTexture"), 0);
         glActiveTexture(GL_TEXTURE1);
         awesomeText.bind();
-        glUniform1i(glGetUniformLocation(myShader.Program, "myTexture2"), 1);
+        glUniform1i(glGetUniformLocation(myShader.Program, "overlayTexture"), 1);
 
         glBindVertexArray(VAO);
-        glm::mat4 view = glm::translate(unitmat, glm::vec3(x_pos, 0.0f, z_pos));
+        glm::mat4 projection = glm::perspective(camera.zoom, (GLfloat)screenWidth / (GLfloat)screenHeight, 0.1f, 100.0f);
+        glm::mat4 view = camera.view();
         glUniformMatrix4fv(glGetUniformLocation(myShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
         glUniformMatrix4fv(glGetUniformLocation(myShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
         for (GLuint i = 0; i < (sizeof(cubePositions) / sizeof(glm::vec3)); i++) {
@@ -184,14 +170,50 @@ int main()
         glBindVertexArray(0);
 
         glfwSwapBuffers(window);
-        //pastFrameTimeValue = timeValue;
+        pastFrameTimeValue = timeValue;
         timeValue = glfwGetTime();
-        //speedCoef = 60 * (timeValue - pastFrameTimeValue);
+        deltaTime = timeValue - pastFrameTimeValue;
     }
 
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
-    //glDeleteBuffers(1, &EBO);
     glfwTerminate();
     return 0;
+}
+
+void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mode) {
+    if ((key == GLFW_KEY_ESCAPE) && (action == GLFW_PRESS))
+        glfwSetWindowShouldClose(window, GL_TRUE);
+    if ((key >= 0) && (key < 1024)) {
+        if (action == GLFW_PRESS)
+            keys[key] = true;
+        else if (action == GLFW_RELEASE)
+            keys[key] = false;
+    }
+}
+
+void cameraControl(GLfloat deltaTime) {
+    if (keys[GLFW_KEY_W])
+        camera.move(FORWARD, deltaTime);
+    if (keys[GLFW_KEY_S])
+        camera.move(BACKWARD, deltaTime);
+    if (keys[GLFW_KEY_A])
+        camera.move(LEFTWARD, deltaTime);
+    if (keys[GLFW_KEY_D])
+        camera.move(RIGHTWARD, deltaTime);
+    if (keys[GLFW_KEY_Q])
+        camera.move(LEFTTURN, deltaTime);
+    if (keys[GLFW_KEY_E])
+        camera.move(RIGHTTURN, deltaTime);
+    if (keys[GLFW_KEY_R])
+        camera.move(UPTURN, deltaTime);
+    if (keys[GLFW_KEY_F])
+        camera.move(DOWNTURN, deltaTime);
+    if (keys[GLFW_KEY_I])
+        camera.move(ZOOMIN, deltaTime);
+    if (keys[GLFW_KEY_K])
+        camera.move(ZOOMOUT, deltaTime);
+
+    if ((abs(edgeProximityX) > 1e-6) || (abs(edgeProximityY) > 1e-6))
+        camera.controlms(30.0f * edgeProximityX * deltaTime, 30.0f * edgeProximityY * deltaTime, true);
 }

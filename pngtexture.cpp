@@ -72,6 +72,7 @@ bool PNGTexture::load(const GLchar *name, int &outWidth, int &outHeight, bool &o
     int bit_depth;
     png_get_IHDR(png_ptr, info_ptr, &width, &height, &bit_depth, &color_type,
                  &interlace_type, NULL, NULL);
+    // Цветовой тип позволяет определить, используется ли RGB или же RGBA (с доп. атрибутом прозрачности)
     if ((color_type == PNG_COLOR_TYPE_GRAY_ALPHA) || (color_type == PNG_COLOR_TYPE_RGB_ALPHA))
         outHasAlpha = true;
     else

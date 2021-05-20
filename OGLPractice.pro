@@ -3,31 +3,32 @@ CONFIG += console c++11
 CONFIG -= app_bundle
 CONFIG -= qt
 
-LIBS += -mwindows
-LIBS += -lopengl32
+win32: LIBS += -mwindows -lopengl32
+else:unix: LIBS += -lGL -lGLU -lX11 -lXxf86vm -lXrandr -lpthread -lXi -ldl -lXinerama -lXcursor -lm
 
 SOURCES += \
+        camera.cpp \
         main.cpp \
         pngtexture.cpp \
         shader.cpp
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../Libraries/GLFW/src/ -lglfw3
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../Libraries/GLFW/src/ -lglfw3d
-else:unix: LIBS += -L$$PWD/../Libraries/GLFW/src/ -lglfw3
-INCLUDEPATH += $$PWD/../Libraries/GLFW/src
-DEPENDPATH += $$PWD/../Libraries/GLFW/src
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../Libraries/lib/GLFW/ -lglfw3
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../Libraries/lib/GLFW/ -lglfw3d
+else:unix: LIBS += -L$$PWD/../Libraries/lib/GLFW/ -lglfw3
+INCLUDEPATH += $$PWD/../Libraries/lib/GLFW
+DEPENDPATH += $$PWD/../Libraries/lib/GLFW
 
-LIBS += -L$$PWD/../Libraries/GLEW/lib/ -lglew32d
-INCLUDEPATH += $$PWD/../Libraries/GLEW/lib
-DEPENDPATH += $$PWD/../Libraries/GLEW/lib
+LIBS += -L$$PWD/../Libraries/lib/GLEW/ -lglew32d
+INCLUDEPATH += $$PWD/../Libraries/lib/GLEW
+DEPENDPATH += $$PWD/../Libraries/lib/GLEW
 
-LIBS += -L$$PWD/../Libraries/zlib/ -lzlib.dll
-INCLUDEPATH += $$PWD/../Libraries/zlib
-DEPENDPATH += $$PWD/../Libraries/zlib
+LIBS += -L$$PWD/../Libraries/lib/zlib/ -lzlib.dll
+INCLUDEPATH += $$PWD/../Libraries/lib/zlib
+DEPENDPATH += $$PWD/../Libraries/lib/zlib
 
-LIBS += -L$$PWD/../Libraries/png/ -lpng
-INCLUDEPATH += $$PWD/../Libraries/png
-DEPENDPATH += $$PWD/../Libraries/png
+LIBS += -L$$PWD/../Libraries/lib/png/ -lpng
+INCLUDEPATH += $$PWD/../Libraries/lib/png
+DEPENDPATH += $$PWD/../Libraries/lib/png
 
 
 
@@ -40,6 +41,7 @@ HEADERS += \
     ../Libraries/include/glm/glm.hpp \
     ../Libraries/include/glm/gtc/matrix_transform.hpp \
     ../Libraries/include/glm/gtc/type_ptr.hpp \
+    camera.h \
     pngtexture.h \
     shader.h
 

@@ -3,8 +3,7 @@
 
 #include <GL/glew.h>
 
-class PNGTexture
-{
+class PNGTexture {
 public:
     PNGTexture(const GLchar *name);
     void bind();
