@@ -23,7 +23,6 @@ using namespace std;
 bool keys[1024];
 Camera camera;
 int screenWidth, screenHeight;
-GLfloat edgeProximityX = 0.0f, edgeProximityY = 0.0f;
 
 void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mode);
 void cameraControl(GLfloat deltaTime);
@@ -56,8 +55,6 @@ int main()
 
     Shader myShader("shaders/standardShader.vrs", "shaders/standardShader.frs");
 
-    PNGTexture containerText("textures/container.png");
-    PNGTexture awesomeText("textures/awesome.png");
     PNGTexture reimuText("textures/reimu.png");
     PNGTexture marisaText("textures/marisa.png");
     PNGTexture fabricText("textures/fabric.png");
@@ -70,7 +67,7 @@ int main()
     vector<OGLObj *> objlist;
     // Комната
     objlist.push_back(new ObjCube(myShader.Program, glm::vec3(0.0f, 4.5f, 0.0f), &wallText, &wallText, &floorText, &transText, &transText, &transText, 10.0f, glm::vec3(0.0f, 0.0f, 0.0f)));
-    // Пирамидки с Рейму
+    // Пирамидки
     objlist.push_back(new ObjPyramid(myShader.Program, glm::vec3(-0.6f, 2.3f + 0.0003f, 1.0f), &fabricText, &reimuText, &transText, &transText, 0.75f, glm::vec3(1.0f, 7.0f, 35.0f)));
     objlist.push_back(new ObjPyramid(myShader.Program, glm::vec3(0.2f, 2.25f + 0.0003f, 1.3f), &fabricText, &reimuText, &transText, &transText, 0.5f, glm::vec3(0.0f, 20.0f, 0.0f)));
     objlist.push_back(new ObjPyramid(myShader.Program, glm::vec3(1.2f, 0.9f + 0.0002f, 2.0f), &fabricText, &marisaText, &transText, &transText, 0.8f, glm::vec3(0.0f, 90.0f, 0.0f)));
@@ -106,6 +103,7 @@ int main()
         for (GLuint i = 0; i < objlist.size(); i++)
             objlist[i]->draw();
 
+        glfwSwapInterval(1);
         glfwSwapBuffers(window);
         pastFrameTimeValue = timeValue;
         timeValue = glfwGetTime();
@@ -119,12 +117,6 @@ int main()
 void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mode) {
     if ((key == GLFW_KEY_ESCAPE) && (action == GLFW_PRESS))
         glfwSetWindowShouldClose(window, GL_TRUE);
-    if ((key == GLFW_KEY_RIGHT_CONTROL) && (action == GLFW_PRESS)) {
-        cout << camera.pos.x << " " << camera.pos.y << " " << camera.pos.z << endl;
-        cout << camera.front.x << " " << camera.front.y << " " << camera.front.z << endl;
-        cout << camera.up.x << " " << camera.up.y << " " << camera.up.z << endl;
-        cout << camera.yaw << " " << camera.pitch << endl;
-    }
 
     if ((key >= 0) && (key < 1024)) {
         if (action == GLFW_PRESS)
@@ -155,7 +147,4 @@ void cameraControl(GLfloat deltaTime) {
         camera.move(ZOOMIN, deltaTime);
     if (keys[GLFW_KEY_K])
         camera.move(ZOOMOUT, deltaTime);
-
-    if ((abs(edgeProximityX) > 1e-6) || (abs(edgeProximityY) > 1e-6))
-        camera.controlms(30.0f * edgeProximityX * deltaTime, 30.0f * edgeProximityY * deltaTime, true);
 }

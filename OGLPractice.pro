@@ -62,8 +62,8 @@ DISTFILES += \
 !isEmpty(target.path): INSTALLS += target
 
 OTHER_FILES += \
-    $$PWD/textures \
-    $$PWD/shaders
+    $$PWD/shaders \
+    $$PWD/textures
 
 # Копирует файлы из директорий в OTHER_FILES в выходную
 defineTest(copyToDestDir) {

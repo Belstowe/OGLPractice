@@ -24,8 +24,6 @@ PNGTexture::PNGTexture(const GLchar *name) {
     glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? GL_RGBA : GL_RGB, width,
                  height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE,
                  bufImage);
-    //glEnable(GL_TEXTURE_2D);
-    //glShadeModel(GL_FLAT);
     glGenerateMipmap(GL_TEXTURE_2D);
     free(bufImage);
     glBindTexture(GL_TEXTURE_2D, 0);

@@ -10,7 +10,7 @@ ObjPyramid::ObjPyramid(GLuint program, glm::vec3 pos, PNGTexture *baseTexture, P
     this->overlayTextureBack = overlayTextureBack;
     this->overlayTextureBtm = overlayTextureBtm;
 
-    initVertexArrays(&frontVAO, &frontVBO, frontVerticles, 4);
+    initVertexArrays(&frontVAO, &frontVBO, frontVerticles, 2);
     initVertexArrays(&backVAO, &backVBO, backVerticles, 2);
     initVertexArrays(&bottomVAO, &bottomVBO, bottomVerticles, 2);
 }
@@ -22,7 +22,7 @@ ObjPyramid::~ObjPyramid() {
 }
 
 void ObjPyramid::draw() {
-    drawVertexArrays(frontVAO, baseTexture, overlayTextureFront, 4);
+    drawVertexArrays(frontVAO, baseTexture, overlayTextureFront, 2);
     drawVertexArrays(backVAO, baseTexture, overlayTextureBack, 2);
     drawVertexArrays(bottomVAO, baseTexture, overlayTextureBtm, 2);
 }
