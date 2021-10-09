@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <cstdio>
+#include <cstring>
 #include <png.h>
 using namespace std;
 

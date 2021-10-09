@@ -1,6 +1,19 @@
 # This file is used to ignore files which are generated
 # ----------------------------------------------------------------------------
 
+# Build results
+
+[Dd]ebug/
+[Rr]elease/
+x64/
+build/
+build_*/
+[Bb]in/
+[Oo]bj/
+
+# CMake
+cmake-build-*/
+
 *~
 *.autosave
 *.a
