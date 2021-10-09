@@ -35,7 +35,9 @@ jobs:
     steps:
       # Checks-out the repository under $GITHUB_WORKSPACE, so the job can access it
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: |
+          actions/checkout@v2
+          openrndr/setup-opengl@v1.1
 
       - name: Install Dependencies
         run: |
@@ -75,7 +77,9 @@ jobs:
     steps:
       # Checks-out the repository under $GITHUB_WORKSPACE, so the job can access it
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: |
+          actions/checkout@v2
+          openrndr/setup-opengl@v1.1
 
       - name: Install Dependencies
         run: |
