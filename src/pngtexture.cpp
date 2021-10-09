@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <cstdio>
+#include <cstring>
 #include <png.h>
 using namespace std;
 
@@ -35,7 +36,7 @@ bool PNGTexture::load(const GLchar *name, int &outWidth, int &outHeight, bool &o
     unsigned int sig_read = 0;
     int color_type, interlace_type;
     FILE *fp;
-    if ((fp = fopen(name, "rb")) == NULL)
+    if (fopen_s(&fp, name, "rb"))
         return false;
 
     // Инициализация png_struct со стандартными методами для обработки исключений stderr и longjump

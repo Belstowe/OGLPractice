@@ -106,7 +106,7 @@ int main()
         glfwSwapInterval(1);
         glfwSwapBuffers(window);
         pastFrameTimeValue = timeValue;
-        timeValue = glfwGetTime();
+        timeValue = (GLfloat)glfwGetTime();
         deltaTime = timeValue - pastFrameTimeValue;
     }
 
