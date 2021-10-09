@@ -42,7 +42,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          sudo apt install ninja-build libgl-dev libglx-dev libglu1-mesa-dev libgl1-mesa-dev mesa-common-dev libxrandr-dev libxinerama-dev libx11-dev libxcursor-dev libxi-dev
+          sudo apt install ninja-build libgl-dev libglx-dev libglu1-mesa-dev libgl1-mesa-dev mesa-common-dev libxrandr-dev libxinerama-dev libx11-dev libxcursor-dev libxi-dev libxxf86vm-dev
 
       # Some projects don't allow in-source building, so create a separate build directory
       - name: Create Build Environment
@@ -75,7 +75,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          sudo apt install ninja-build libgl-dev libglx-dev libglu1-mesa-dev libgl1-mesa-dev mesa-common-dev libxrandr-dev libxinerama-dev libx11-dev libxcursor-dev libxi-dev
+          sudo apt install ninja-build libgl-dev libglx-dev libglu1-mesa-dev libgl1-mesa-dev mesa-common-dev libxrandr-dev libxinerama-dev libx11-dev libxcursor-dev libxi-dev libxxf86vm-dev
 
       # Some projects don't allow in-source building, so create a separate build directory
       - name: Create Build Environment
