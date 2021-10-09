@@ -52,19 +52,17 @@ jobs:
       # Use a bash shell for rgw same syntax regardless of the host OS
       - name: Configure CMake
         shell: bash
+        env:
+          CC: clang
+          CXX: clang++
         working-directory: ${{runner.workspace}}/build_test
-        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -GNinja
+        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -G"Unix Makefiles"
 
       # Exports CC and CXX to tell CMake which compiler to use; runs CMake
       - name: Build CMake with Clang
         working-directory: ${{runner.workspace}}/build_test
         shell: bash
-        env:
-          CC: clang
-          CXX: clang++
-        run: |
-          cmake --build . --config $BUILD_TYPE
-          find ./_deps/ -print
+        run: cmake --build . --config $BUILD_TYPE
 
   build-linux-gcc:
     # Making on a Linux distribution
@@ -87,16 +85,14 @@ jobs:
       # Use a bash shell for rgw same syntax regardless of the host OS
       - name: Configure CMake
         shell: bash
+        env:
+          CC: gcc
+          CXX: g++
         working-directory: ${{runner.workspace}}/build_test
-        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -GNinja
+        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -G"Unix Makefiles"
 
       # Exports CC and CXX to tell CMake which compiler to use; runs CMake
       - name: Build CMake with GCC
         working-directory: ${{runner.workspace}}/build_test
         shell: bash
-        env:
-          CC: gcc
-          CXX: g++
-        run: |
-          cmake --build . --config $BUILD_TYPE
-          find ./_deps/ -print
+        run: cmake --build . --config $BUILD_TYPE

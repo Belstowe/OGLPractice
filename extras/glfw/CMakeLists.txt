@@ -22,4 +22,4 @@ if(NOT glfw3_POPULATED)
     endif()
 endif()
 
-#add_dependencies(${PROJECT_NAME} glfw3)
+add_dependencies(${PROJECT_NAME} glfw)

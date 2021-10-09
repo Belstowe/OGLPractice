@@ -12,3 +12,5 @@ if(NOT glm_POPULATED)
 
     set(GLM_INCLUDE_DIR ${glm_SOURCE_DIR} CACHE INTERNAL "GLM_INCLUDE_DIR")
 endif()
+
+add_dependencies(${PROJECT_NAME} glm)

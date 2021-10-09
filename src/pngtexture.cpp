@@ -37,7 +37,7 @@ bool PNGTexture::load(const GLchar *name, int &outWidth, int &outHeight,
   unsigned int sig_read = 0;
   int color_type, interlace_type;
   FILE *fp;
-  if (fopen_s(&fp, name, "rb"))
+  if ((fp = fopen(name, "rb")) == NULL)
     return false;
 
   // Инициализация png_struct со стандартными методами для обработки исключений
