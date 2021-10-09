@@ -25,7 +25,7 @@ jobs:
       
       # Checks for code to follow LLVM format using clang-format
       - name: Check Code Style
-        run: find src/ tests/ -regex '.*\.\(cpp\|hpp\|h\)' -exec clang-format -style=file -i {} \; && git diff --exit-code
+        run: find src/ -regex '.*\.\(cpp\|hpp\|h\)' -exec clang-format -style=file -i {} \; && git diff --exit-code
 
 
   build-linux-clang:
