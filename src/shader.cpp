@@ -4,7 +4,6 @@
 #include <iostream>
 #include <sstream>
 
-
 using namespace std;
 
 Shader::Shader(const GLchar *vertexPath, const GLchar *fragmentPath) {

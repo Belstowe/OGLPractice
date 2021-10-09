@@ -3,7 +3,6 @@
 #include <string>
 #include <vector>
 
-
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -15,7 +14,6 @@
 #include "ogl_obj/objpyramid.h"
 #include "pngtexture.h"
 #include "shader.h"
-
 
 #define WIDTH 1280
 #define HEIGHT 720
@@ -56,7 +54,7 @@ int main() {
   glfwGetFramebufferSize(window, &screenWidth, &screenHeight);
   glViewport(0, 0, screenWidth, screenHeight);
 
-  Shader myShader("shaders/standardShader.vrs", "shaders/standardShader.frs");
+  Shader myShader("shaders/standardShader.vert", "shaders/standardShader.frag");
 
   PNGTexture reimuText("textures/reimu.png");
   PNGTexture marisaText("textures/marisa.png");

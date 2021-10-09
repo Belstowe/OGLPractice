@@ -5,7 +5,6 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 
-
 class OGLObj {
 public:
   OGLObj(GLuint program, glm::vec3 pos, GLfloat sizefactor, glm::vec3 rotation);
