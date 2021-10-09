@@ -54,7 +54,7 @@ int main() {
   glfwGetFramebufferSize(window, &screenWidth, &screenHeight);
   glViewport(0, 0, screenWidth, screenHeight);
 
-  Shader myShader("shaders/standardShader.vrs", "shaders/standardShader.frs");
+  Shader myShader("shaders/standardShader.vert", "shaders/standardShader.frag");
 
   PNGTexture reimuText("textures/reimu.png");
   PNGTexture marisaText("textures/marisa.png");
