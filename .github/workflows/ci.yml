@@ -42,7 +42,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          sudo apt install ninja-build libgl-dev libglx-dev libglu1-mesa-dev libgl1-mesa-dev mesa-common-dev libxrandr-dev libxinerama-dev libx11-dev libxcursor-dev libxi-dev
+          sudo apt install ninja-build libgl-dev libglx-dev libglu1-mesa-dev libgl1-mesa-dev mesa-common-dev libxrandr-dev libxinerama-dev libx11-dev libxcursor-dev libxi-dev libxxf86vm-dev
 
       # Some projects don't allow in-source building, so create a separate build directory
       - name: Create Build Environment
@@ -56,7 +56,7 @@ jobs:
           CC: clang
           CXX: clang++
         working-directory: ${{runner.workspace}}/build_test
-        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -G"Unix Makefiles"
+        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -GNinja
 
       # Exports CC and CXX to tell CMake which compiler to use; runs CMake
       - name: Build CMake with Clang
@@ -75,7 +75,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          sudo apt install ninja-build libgl-dev libglx-dev libglu1-mesa-dev libgl1-mesa-dev mesa-common-dev libxrandr-dev libxinerama-dev libx11-dev libxcursor-dev libxi-dev
+          sudo apt install ninja-build libgl-dev libglx-dev libglu1-mesa-dev libgl1-mesa-dev mesa-common-dev libxrandr-dev libxinerama-dev libx11-dev libxcursor-dev libxi-dev libxxf86vm-dev
 
       # Some projects don't allow in-source building, so create a separate build directory
       - name: Create Build Environment
@@ -89,7 +89,7 @@ jobs:
           CC: gcc
           CXX: g++
         working-directory: ${{runner.workspace}}/build_test
-        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -G"Unix Makefiles"
+        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -GNinja
 
       # Exports CC and CXX to tell CMake which compiler to use; runs CMake
       - name: Build CMake with GCC
