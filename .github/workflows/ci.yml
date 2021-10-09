@@ -56,7 +56,7 @@ jobs:
           CC: clang
           CXX: clang++
         working-directory: ${{runner.workspace}}/build_test
-        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -G"Unix Makefiles"
+        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -GNinja
 
       # Exports CC and CXX to tell CMake which compiler to use; runs CMake
       - name: Build CMake with Clang
@@ -89,7 +89,7 @@ jobs:
           CC: gcc
           CXX: g++
         working-directory: ${{runner.workspace}}/build_test
-        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -G"Unix Makefiles"
+        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -GNinja
 
       # Exports CC and CXX to tell CMake which compiler to use; runs CMake
       - name: Build CMake with GCC
