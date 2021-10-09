@@ -5,13 +5,14 @@
 
 class PNGTexture {
 public:
-    PNGTexture(const GLchar *name);
-    void bind();
-    GLuint texture;
+  PNGTexture(const GLchar *name);
+  void bind();
+  GLuint texture;
 
 private:
-    void init();
-    bool load(const GLchar *name, int &outWidth, int &outHeight, bool &outHasAlpha, GLubyte **outData);
+  void init();
+  bool load(const GLchar *name, int &outWidth, int &outHeight,
+            bool &outHasAlpha, GLubyte **outData);
 };
 
 #endif // PNGTEXTURE_H
