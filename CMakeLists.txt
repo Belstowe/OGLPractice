@@ -26,12 +26,16 @@ add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SOURCE_FILES})
 
 add_subdirectory(extras)
 
-set(LIBS OpenGL::GL ${GLEW_LIBRARY} ${GLFW3_LIBRARY} ${ZLIB_LIBRARY} ${PNG_LIBRARY})
 if(NOT MSVC)
         set(LIBS ${LIBS} m)
 endif()
-
+if(UNIX)
+        set(LIBS ${LIBS} dl Xrandr Xrender Xi Xfixes Xxf86vm Xext X11 pthread xcb Xau Xdmcp)
+        target_link_options(${PROJECT_NAME} BEFORE PRIVATE -Wl,--start-group)
+endif()
+set(LIBS ${LIBS} OpenGL::GL ${GLEW_LIBRARY} ${GLFW3_LIBRARY} ${ZLIB_LIBRARY} ${PNG_LIBRARY})
 target_link_libraries(${PROJECT_NAME} PRIVATE ${LIBS})
+
 target_include_directories(${PROJECT_NAME} PRIVATE "${OPENGL_INCLUDE_DIR}" "${GLEW_INCLUDE_DIR}" "${GLM_INCLUDE_DIR}" "${GLFW3_INCLUDE_DIR}" "${PNG_INCLUDE_DIR}")
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
