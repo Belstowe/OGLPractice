@@ -16,16 +16,19 @@ if(NOT libpng_POPULATED)
 
     add_subdirectory(${libpng_SOURCE_DIR} ${libpng_BINARY_DIR})
 
+    # All libpng targets depend on zlib; as we are building zlib together with libpng, we need to explicitly add zlib as dependency to it, so zlib would be built before those targets
     add_dependencies(png zlib)
     add_dependencies(pngfix zlib)
     add_dependencies(png-fix-itxt zlib)
 
+    # If libpng is built as Debug lib, it has 'd' appended to its name
     if(${CMAKE_BUILD_TYPE} STREQUAL Debug)
         set(PNG_NAME "png16d")
     else()
         set(PNG_NAME "png16")
     endif()
 
+    # Setting PNG_INCLUDE_DIR (to include header files), PNG_LIBRARY (to link it with our project) and PNG_DLL (to put together with executable, as we are building shared lib) paths
     set(PNG_INCLUDE_DIR ${libpng_SOURCE_DIR} CACHE INTERNAL "PNG_INCLUDE_DIR")
     if(MSVC)
         set(PNG_LIBRARY ${libpng_BINARY_DIR}/Debug/lib${PNG_NAME}.lib CACHE INTERNAL "PNG_LIBRARY")
@@ -38,9 +41,9 @@ if(NOT libpng_POPULATED)
         set(PNG_DLL ${libpng_BINARY_DIR}/lib${PNG_NAME}.dll CACHE INTERNAL "PNG_DLL")
     endif()
     
+    # Because pnglibconf.h in the build directory is only generated during build, we are forced to use the pre-generated one
     configure_file("pnglibconf.h" "${libpng_SOURCE_DIR}/pnglibconf.h" COPYONLY)
-    configure_file("pnglibconf.c" "${libpng_SOURCE_DIR}/pnglibconf.c" COPYONLY)
-    configure_file("pngprefix.h" "${libpng_SOURCE_DIR}/pngprefix.h" COPYONLY)
 endif()
 
+# Adding dependencies to project, so it would be built as the last one
 add_dependencies(${PROJECT_NAME} png)
