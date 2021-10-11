@@ -39,8 +39,6 @@ if(NOT libpng_POPULATED)
     endif()
     
     configure_file("pnglibconf.h" "${libpng_SOURCE_DIR}/pnglibconf.h" COPYONLY)
-    configure_file("pnglibconf.c" "${libpng_SOURCE_DIR}/pnglibconf.c" COPYONLY)
-    configure_file("pngprefix.h" "${libpng_SOURCE_DIR}/pngprefix.h" COPYONLY)
 endif()
 
 add_dependencies(${PROJECT_NAME} png)
