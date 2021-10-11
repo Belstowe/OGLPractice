@@ -1,7 +1,7 @@
 #ifndef OBJCUBE_H
 #define OBJCUBE_H
 
-#include "oglobj.h"
+#include "oglobj.hpp"
 
 class ObjCube : public OGLObj {
 public:

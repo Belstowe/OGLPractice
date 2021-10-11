@@ -14,7 +14,7 @@ set(CMAKE_CXX_STANDARD 11)
 file(GLOB_RECURSE SOURCE_FILES
         ${CMAKE_SOURCE_DIR}/src/*.cpp)
 file(GLOB_RECURSE HEADER_FILES
-        ${CMAKE_SOURCE_DIR}/src/*.h)
+        ${CMAKE_SOURCE_DIR}/src/*.hpp)
 
 find_package(OpenGL REQUIRED)
 

@@ -9,11 +9,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "camera.h"
-#include "ogl_obj/objcube.h"
-#include "ogl_obj/objpyramid.h"
-#include "pngtexture.h"
-#include "shader.h"
+#include "camera.hpp"
+#include "ogl_obj/objcube.hpp"
+#include "ogl_obj/objpyramid.hpp"
+#include "pngtexture.hpp"
+#include "shader.hpp"
 
 #define WIDTH 1280
 #define HEIGHT 720
