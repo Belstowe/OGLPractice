@@ -41,8 +41,8 @@ if(NOT libpng_POPULATED)
         set(PNG_DLL ${libpng_BINARY_DIR}/lib${PNG_NAME}.dll CACHE INTERNAL "PNG_DLL")
     endif()
     
-    # Because pnglibconf.h in the build directory is only generated during build, we are forced to use the pre-generated one
-    configure_file("pnglibconf.h" "${libpng_SOURCE_DIR}/pnglibconf.h" COPYONLY)
+    # Because pnglibconf.h in the build directory is only generated during build, we are forced to use the prebuilt one
+    configure_file("${libpng_SOURCE_DIR}/scripts/pnglibconf.h.prebuilt" "${libpng_SOURCE_DIR}/pnglibconf.h" COPYONLY)
 endif()
 
 # Adding dependencies to project, so it would be built as the last one
