@@ -10,8 +10,6 @@ project(
 
 set(CMAKE_CXX_STANDARD 11)
 
-link_directories(${CMAKE_SOURCE_DIR}/lib)
-
 # I am too lazy to add source and header files one by one, let GLOB_RECURSE deal with it.
 file(GLOB_RECURSE SOURCE_FILES
         ${CMAKE_SOURCE_DIR}/src/*.cpp)
