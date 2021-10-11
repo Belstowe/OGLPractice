@@ -1,7 +1,7 @@
 #ifndef OBJPYRAMID_H
 #define OBJPYRAMID_H
 
-#include "oglobj.h"
+#include "oglobj.hpp"
 
 class ObjPyramid : public OGLObj {
 public:

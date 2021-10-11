@@ -1,4 +1,4 @@
-#include "pngtexture.h"
+#include "pngtexture.hpp"
 
 #include <cstdio>
 #include <cstring>

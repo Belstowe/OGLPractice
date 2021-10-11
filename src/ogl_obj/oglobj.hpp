@@ -1,7 +1,7 @@
 #ifndef OGLOBJ_H
 #define OGLOBJ_H
 
-#include "../pngtexture.h"
+#include "../pngtexture.hpp"
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 
