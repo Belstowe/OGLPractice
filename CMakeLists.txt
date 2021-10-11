@@ -33,6 +33,7 @@ if(NOT MSVC)
         set(LIBS ${LIBS} m)
 endif()
 # If it is Unix, when graphically it uses X11 Window System. Linking its libs to the project
+# We don't check for it as GLFW dependency already does that for us
 if(UNIX)
         set(LIBS ${LIBS} dl Xrandr Xrender Xi Xfixes Xxf86vm Xext X11 pthread xcb Xau Xdmcp)
         target_link_options(${PROJECT_NAME} BEFORE PRIVATE -Wl,--start-group)
