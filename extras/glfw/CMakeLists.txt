@@ -14,6 +14,8 @@ if(NOT glfw3_POPULATED)
     set(GLFW_INSTALL OFF CACHE INTERNAL "Generate installation target")
 
     add_subdirectory(${glfw3_SOURCE_DIR} ${glfw3_BINARY_DIR})
+
+    # Setting GLFW3_INCLUDE_DIR (to include header files) and GLFW3_LIBRARY (to link it with our project) paths
     set(GLFW3_INCLUDE_DIR ${glfw3_SOURCE_DIR}/include CACHE INTERNAL "GLFW3_INCLUDE_DIR")
     if(MSVC)
         set(GLFW3_LIBRARY ${glfw3_BINARY_DIR}/src/Debug/glfw3.lib CACHE INTERNAL "GLFW3_LIBRARY")
@@ -22,4 +24,5 @@ if(NOT glfw3_POPULATED)
     endif()
 endif()
 
+# Adding dependencies to project, so it would be built as the last one
 add_dependencies(${PROJECT_NAME} glfw)
